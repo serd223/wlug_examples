@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 wasmtime = "29.0.1"
-wlug = { git = "https://github.com/serd223/wlug.git", rev = "6b0fbf115b0f1d74547b4ef15ea2d8547ae0780a", version = "0.1.0" }
+wlug = { git = "https://github.com/serd223/wlug.git", rev = "f1eede43654c77ee25da8da5ded142023f3f075d", version = "0.1.0" }

@@ -50,7 +50,7 @@ fn main() -> wasmtime::Result<()> {
         buf.resize(width * height, 0);
 
         if window.is_key_pressed(Key::Space, KeyRepeat::No) {
-            plugs.reset();
+            plugs.reset()?;
             load_plugs(&mut plugs, &engine)?;
         }
 
