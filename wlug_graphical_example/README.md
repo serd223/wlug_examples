@@ -12,7 +12,7 @@ You can press the spacebar to hot reload the plugins while the program is runnin
 ### Linux
 - [Rust](https://www.rust-lang.org/tools/install)
 - wasm32-unknown-unknown target for Rust: `rustup target add wasm32-unknown-unknown`
-- Dependencies required by the `minifb` crate:
+- Dependencies required by the `minifb` crate (used for rendering):
 ```console
 sudo apt install libxkbcommon-dev libwayland-cursor0 libwayland-dev
 ```
