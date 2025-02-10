@@ -8,7 +8,7 @@ typedef struct {
     int y;
 } State;
 
-State* state = {0};
+State state = {0};
 char* state_var = "state";
 
 char* __name() {
@@ -17,28 +17,28 @@ char* __name() {
 
 void __init() {
     print("[test_plug_c.init] Initializing...\n");
-    if (get_host(state_var, state) < 0) {
-        state->x = 1;
-        state->y = 5;
+    if (get_host(state_var, &state) < 0) {
+        state.x = 1;
+        state.y = 5;
     }
     print("[test_plug_c.init] Initialization complete!\n");
 }
 
 void run() {
     print("[test_plug_c.run] state.x: ");
-    for (int i = 0; i < state->x; ++i) print("x");
+    for (int i = 0; i < state.x; ++i) print("x");
     print("\n[test_plug_c.run] state.y: ");
-    for (int i = 0; i < state->y; ++i) print("y");
+    for (int i = 0; i < state.y; ++i) print("y");
     print("\n");
     print("[test_plug_c.run] Mutating state.x...\n");
-    state->x += 5;
+    state.x += 5;
     print("[test_plug_c.run] New value of state.x: ");
-    for (int i = 0; i < state->x; ++i) print("x");
+    for (int i = 0; i < state.x; ++i) print("x");
     print("\n");
 }
 
 void __reset() {
     print("[test_plug_c.reset] Storing `state`\n");
-    alloc_host(state_var, state, sizeof(State));    
+    alloc_host(state_var, &state, sizeof(State));    
     print("[test_plug_c.reset] Storage complete\n");
 }
