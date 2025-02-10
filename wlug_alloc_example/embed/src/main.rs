@@ -1,10 +1,12 @@
 use std::{collections::HashMap, io::Write};
 
-use wlug::{PlugContext, Plugs, wasmtime::{self, Caller, Engine}};
+use wlug::{
+    wasmtime::{self, Caller, Engine},
+    PlugContext, Plugs,
+};
 
 struct State {
     data: HashMap<String, Vec<u8>>,
-    plug_names: Vec<String>,
 }
 
 // This example defines simple host functions to allocate arbitrary persistent memory from inside of plugins
@@ -16,7 +18,6 @@ fn main() -> wasmtime::Result<()> {
         &engine,
         State {
             data: HashMap::new(),
-            plug_names: Vec::new(),
         },
     );
 
@@ -30,7 +31,6 @@ fn main() -> wasmtime::Result<()> {
     println!("\n[main] Resetting plugin:\n");
     println!("---------------");
     plugs.reset()?;
-    plugs.state_mut().plug_names.clear();
     println!("---------------");
 
     println!("\n[main] Second run after reload:\n");
@@ -38,7 +38,6 @@ fn main() -> wasmtime::Result<()> {
 
     plugs.reset()?; // Reset to update state.data
     println!("---------------");
-    plugs.state_mut().plug_names.clear();
     println!(
         "\n[main] Contents of `state.data`:\n    {:?}\n",
         plugs.state().data
@@ -49,20 +48,8 @@ fn main() -> wasmtime::Result<()> {
 
 // Convenience function for easily handling reloading
 fn load_run_plug(plugs: &mut Plugs<State>, engine: &Engine) -> wasmtime::Result<()> {
-    let plug_name = "test_plug";
-    let id = plugs.load("test_plug.wasm", engine)?;
-    plugs
-        .state_mut()
-        .plug_names
-        .insert(id, plug_name.to_string());
-
-    let plug_name = "test_plug_c";
-    let id = plugs.load("test_plug_c.wasm", engine)?;
-    plugs
-        .state_mut()
-        .plug_names
-        .insert(id, plug_name.to_string());
-
+    plugs.load("test_plug.wasm", engine)?;
+    plugs.load("test_plug_c.wasm", engine)?;
     plugs.link()?;
     println!("[main.load_run_plug] Plugs::init start");
     println!("---------------");
@@ -88,8 +75,8 @@ fn alloc_host(
 
     let mut data = Vec::new();
     let mut name = {
-        let PlugContext(id, state) = c.data();
-        state.plug_names[*id].clone()
+        let PlugContext(id, _) = c.data();
+        id.to_string()
     };
     let memory = memory_export.data(&mut c);
     push_wasm_str_into(&mut name, memory, name_ptr);
@@ -106,12 +93,8 @@ fn alloc_host(
 fn get_host(mut c: Caller<'_, PlugContext<State>>, name_ptr: u32, dest_ptr: u32) -> i32 {
     let memory_export = c.get_export("memory").unwrap().into_memory().unwrap();
     let mut name = {
-        let PlugContext(id, state) = c.data();
-        if let Some(name) = state.plug_names.get(*id) {
-            name.clone()
-        } else {
-            return -1;
-        }
+        let PlugContext(id, _) = c.data();
+        id.to_string()
     };
     let memory = memory_export.data(&mut c);
     push_wasm_str_into(&mut name, memory, name_ptr);
