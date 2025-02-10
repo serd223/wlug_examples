@@ -1,7 +1,6 @@
 use framebrush::{Canvas, BLUE, RED};
 use minifb::{Key, KeyRepeat, Window, WindowOptions};
-use wasmtime::{Caller, Engine};
-use wlug::{PlugContext, Plugs};
+use wlug::{PlugContext, Plugs, wasmtime::{self, Caller, Engine}};
 
 const DEFAULT_WIDTH: usize = 800;
 const DEFAULT_HEIGHT: usize = 600;

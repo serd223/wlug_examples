@@ -1,7 +1,6 @@
 use std::{collections::HashMap, io::Write};
 
-use wasmtime::{Caller, Engine};
-use wlug::{PlugContext, Plugs};
+use wlug::{PlugContext, Plugs, wasmtime::{self, Caller, Engine}};
 
 struct State {
     data: HashMap<String, Vec<u8>>,

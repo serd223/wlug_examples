@@ -6,5 +6,4 @@ edition = "2021"
 [dependencies]
 framebrush = { git = "https://github.com/serd223/framebrush.git", rev = "fe9364a2228ea8817c67a1ce1bbe5846ed4ddcee", version = "0.1.0" }
 minifb = "0.28.0"
-wasmtime = "29.0.1"
-wlug = { git = "https://github.com/serd223/wlug", rev = "f1eede43654c77ee25da8da5ded142023f3f075d", version = "0.1.0" }
+wlug = { git = "https://github.com/serd223/wlug", rev = "ba15e0c9c6311c620fac7504d6f9d298e03b4f48", version = "0.1.0" }
